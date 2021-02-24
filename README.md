@@ -20,7 +20,7 @@ MongoDB is a great NoSQL and schema-less database, but if already have data in d
 ## How to use it
 
 1. create a fold named `migrations`
-2. create a python file with name like `20160320145400_description.py`
+2. create a python file with name in form of `TIMESTAMP_description.py` , i.e.`20160320145400_description.py`, otherwise migration file won't be found.
 3. in `20160320145400_description.py` create a class named `Migration` and extends `BaseMigration`
 4. implement `upgrade` method
 5. use cli `mongodb-migrate` to run migrations
@@ -30,7 +30,7 @@ If you don't wish to use the CLI, you can override the MigrationManager -> creat
 
 ```python
     manager = MigrationManager()
-    manager.config.migrator_config = "foobar.ini"
+    manager.config.config_file = "foobar.ini"
     manager.config._from_ini()
     manager.run()
 ```
@@ -65,6 +65,17 @@ url = mongodb://127.0.0.1:27017/test
 migrations = migrations
 ```
 
+### auth-db config.ini example
+```ini
+[mongo]
+url = mongodb://127.0.0.1:27017/admin
+username = admin
+password = secret123
+database = test
+migrations = migrations
+metastore = database_migrations
+```
+
 ### command line arguments example
 
 ```bash
@@ -87,6 +98,11 @@ $ MONGODB_MIGRATIONS_CONFIG=examples/config.ini mongodb-migrate
 
 For Downgrading the migrations, you need to pass a command line switch `--downgrade`
 
+To upgrade/downgrade only to a specific migration, use `--to_datetime`. This command will upgrade to the migration with prefix `20191115180633`:
+```bash
+mongodb-migrate --url mongodb://127.0.0.1:27017/test --migrations examples --to_datetime 20191115180633
+```
+
 ## Getting involved
 
 * if you find any bug or need anything, please log an issue here: [Issues](https://github.com/DoubleCiti/mongodb-migrations/issues)
@@ -94,3 +110,4 @@ For Downgrading the migrations, you need to pass a command line switch `--downgr
 ## Contributors
 
 * [Rohit Garg](https://github.com/rohitggarg)
+* [mpgalaxy](https://github.com/mpgalaxy)
