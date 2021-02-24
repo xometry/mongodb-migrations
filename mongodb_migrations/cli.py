@@ -37,7 +37,7 @@ class MigrationManager(object):
         self.database_migration_names = [migration['migration_datetime'] for migration in database_migrations]
         if set(self.database_migration_names) - set(self.migrations.keys()):
             print("ERROR: migrations do not match")
-            print ("your db has run migrations with the following unexpected datetimes:")
+            print ("Database has migrations applied that don't exist on disk, with the following datetimes:")
             for migration_datetime in set(self.database_migration_names) - set(self.migrations.keys()):
                 print('\t'+migration_datetime)
             sys.exit(1)
